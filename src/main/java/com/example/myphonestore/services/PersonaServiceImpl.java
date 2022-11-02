@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements PersonaService{
@@ -41,6 +42,19 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
             return personas;
         } catch(Exception e){
             throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public void generarCodigoSeguridad(Long id) throws Exception {
+        try{
+            Optional<Persona> personaTraida = personaRepository.findById(id);
+            if (personaTraida.isPresent()){
+                Persona persona = personaTraida.get();
+                personaRepository.save(persona);
+            }
+        }catch(Exception e){
+            throw new Exception("Fallo al generar token de seguridad");
         }
     }
 }

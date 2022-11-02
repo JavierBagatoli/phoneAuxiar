@@ -52,4 +52,8 @@ public class Persona extends Base {
     )
     private List<Carrito> detalleCarritos = new ArrayList<Carrito>();
 
+
+    public void generarCodigoSeguridad(){
+        setCodigoSeguridad(123456);
+    }
 }
