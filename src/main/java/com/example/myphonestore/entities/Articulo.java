@@ -8,9 +8,10 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
-//@Table(name = "articulo") /*No se si le corresponde una tabla en le bd*/
+@Table(name = "articulo")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

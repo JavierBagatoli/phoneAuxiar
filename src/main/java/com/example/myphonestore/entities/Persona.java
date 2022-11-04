@@ -46,11 +46,11 @@ public class Persona extends Base {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
-            name = "persona_carrito",
+            name = "persona_carritos",
             joinColumns = @JoinColumn(name = "persona_id"),
             inverseJoinColumns = @JoinColumn(name = "carrito_id")
     )
-    private List<Carrito> detalleCarritos = new ArrayList<Carrito>();
+    private List<Carrito> personaCarritos = new ArrayList<>(); ////ToDo cambiar nombre de la variaba carritos
 
 
     public void generarCodigoSeguridad(){

@@ -24,4 +24,10 @@ public interface PersonaRepository extends BaseRepository<Persona, Long> {
             nativeQuery = true
     )
     Page<Persona> search(@Param("filtro") String filtro, Pageable pageable);
+
+    @Query(
+            value = "SELECT * FROM persona WHERE persona.email LIKE %:email%",
+            nativeQuery = true
+    )
+    Persona searchByEmail(@Param("email") String email);
 }

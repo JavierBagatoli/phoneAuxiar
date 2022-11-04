@@ -9,7 +9,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "detalle-carrito")
+@Table(name = "detalle_carrito")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
