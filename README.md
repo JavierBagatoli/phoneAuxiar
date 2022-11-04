@@ -1,81 +1,24 @@
-# ADD in application.properties
-#---------------------------------
-spring.datasource.url=jdbc:h2:file:/tmp/api-persona
-spring.datasource.username=api
+### MyPhone-Store
 
-spring.datasource.password=api
-spring.h2.console.enabled=true
-spring.h2.console.path=/db-h2
-spring.h2.console.settings.trace=true
-spring.h2.console.settings.web-allow-others=true
+Es un proyecto de estudio para la materia de Taller de programación avanzada donde se explora y estudiara Java junto a SQL al igual que tecnologías como pueden ser	Spring Boot o Envers
 
+## Descripción
 
-# BUILD APP creating .jar & (ignoring Tests)
--------------------------------
+MyPhone-Store es una tienda web dedicada a la venta de celulares y algunos de sus accesorios, donde los usuarios o consumidores podrán explorar entre la variedad que tendremos.
 
-mvn clean package -Dmaven.test.skip=true
+## Publico objetivo
 
-#TEST api locally
-------------------
+La tienda esta dirigida hacia el publico en general, tanto como publico especializado
 
-java -jar {localpath}/target/persona-0.0.1-SNAPSHOT.jar
+## Integrantes del grupo The Crew:
 
-# BUILD DOCKER IMAGE 
----------------------
+Javier Bagatoli : Estudiante avanzado de la carrera ingeniería en sistemas de información.
 
-docker build -t api-persona .
+Ariel Mercado : Estudiante avanzado de la carrera con interés en las nuevas tecnologías.
 
-# CHECK DOCKER IMAGE
-----------------------
+Franco Galiotti : Abierto a nuevos desafios.
 
-docker images
+Carlos Gutierrez : Estudiante de la carrera ingeniería en sistemas, positivo y esperando trabajar en nuevos proyectos.
 
-ex.
----
-REPOSITORY      TAG         IMAGE ID            CREATED             SIZE
-api-persona     latest      570e20b156e8        14 seconds ago      567MB
-
-
-#  RUN DOCKER CONTAINER
-------------------------
-docker run --name api-persona -itd -p 9001:9001 api-persona
-
-#  ATTACH DOCKER CONTAINER
-------------------------
-docker attach api-persona
-
-#  STOP DOCKER CONTAINER
-------------------------
-docker stop api-persona
-
-#  START DOCKER CONTAINER
-------------------------
-docker start api-persona
-
-
-#  CONNECT TO H2 DB
-------------------------
-
-http://{IP}:port/db-h2/
-
-Driver Class:   org.h2.Driver
-JDBC URL:       jdbc:h2:/tmp/api-persona
-User Name:      api
-Password:       api
-
-
-
-#  DEPLOY ON PLAY-WITH-DOCKER [https://labs.play-with-docker.com/]
------------------------------
-
-git clone https://github.com/tpautnfrm/api-persona.git
-
-# https://hub.docker.com/_/maven?tab=description 
-
-cd api-persona
-
-docker run -it --rm --name my-maven-project -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven maven mvn clean package -Dmaven.test.skip=true
-
-docker build -t "api-persona" .
-
-docker run --name "api-persona" -d -p 9001:9001 api-persona
+### Prototipo de MyPhone Store 
+<a href="https://www.figma.com/proto/RDDJS4vEcXatX44gWVKo1W/MyPhone-Store?node-id=39%3A192&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=2%3A3"> Prototipo creado en Figma</a>
