@@ -1,6 +1,8 @@
 package com.example.myphonestore.controllers;
 
+import com.example.myphonestore.entities.Dtos.DtoPersonaCambioCredenciales;
 import com.example.myphonestore.entities.Dtos.DtoPersonaLogin;
+import com.example.myphonestore.entities.Dtos.DtoPersonaRegistro;
 import com.example.myphonestore.entities.Persona;
 import com.example.myphonestore.services.PersonaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,46 @@ public class PersonaController extends BaseControllerImpl<Persona, PersonaServic
     public ResponseEntity<?> update(@PathVariable String emailPersona,@RequestBody String id){
         try {
             String respuesta = servicePersona.AddArticleToCart(emailPersona, id);
-            System.out.println("salida post respuesta");
+            return ResponseEntity.status(HttpStatus.OK).body("{\"response\":\"" + respuesta + "\"}");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"" + e.getMessage() +"\"}");
+        }
+    }
+
+    @PostMapping("/registrar")
+    public ResponseEntity<?> registrar(@RequestBody DtoPersonaRegistro credenciales){
+        try{
+            String respuesta = servicePersona.registrar(credenciales);
+            return ResponseEntity.status(HttpStatus.OK).body("{\"response\":\"" + respuesta + "\"}");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"" + e.getMessage() +"\"}");
+        }
+    }
+
+    @PostMapping("/actualizarCredenciales")
+    public ResponseEntity<?> cambiarContrasenia(@RequestBody DtoPersonaCambioCredenciales credenciales){
+        try{
+            String respuesta = servicePersona.cambiarContrasenia(credenciales);
+            return ResponseEntity.status(HttpStatus.OK).body("{\"response\":\"" + respuesta + "\"}");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"" + e.getMessage() +"\"}");
+        }
+    }
+
+    @PostMapping("/realizarCompra")
+    public ResponseEntity<?> realizarCompra(@RequestBody String email){
+        try{
+            String respuesta = servicePersona.realizarCompra(email);
+            return ResponseEntity.status(HttpStatus.OK).body("{\"response\":\"" + respuesta + "\"}");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"" + e.getMessage() +"\"}");
+        }
+    }
+
+    @PostMapping("/limpiarCarrito")
+    public ResponseEntity<?> limpiarCarrito(@RequestBody String email){
+        try{
+            String respuesta = servicePersona.limpiarCarrito(email);
             return ResponseEntity.status(HttpStatus.OK).body("{\"response\":\"" + respuesta + "\"}");
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"" + e.getMessage() +"\"}");

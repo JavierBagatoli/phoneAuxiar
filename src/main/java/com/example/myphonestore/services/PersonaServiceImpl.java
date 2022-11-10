@@ -1,7 +1,9 @@
 package com.example.myphonestore.services;
 
 import com.example.myphonestore.entities.*;
+import com.example.myphonestore.entities.Dtos.DtoPersonaCambioCredenciales;
 import com.example.myphonestore.entities.Dtos.DtoPersonaLogin;
+import com.example.myphonestore.entities.Dtos.DtoPersonaRegistro;
 import com.example.myphonestore.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,8 +87,45 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
         }
     }
 
+    private String comprobarCampoVacio (String campo, String nombreCampo){
+        if (campo.isEmpty())
+            {return nombreCampo + " no puede ser vacío.";}
+        return "no vacio";
+    }
+    public String registrar(DtoPersonaRegistro credenciales) throws Exception{
+        String vectorErrores[] = new String[5];
+        try{
+            vectorErrores[0] = comprobarCampoVacio(credenciales.getApellido(), "Apellido");
+            vectorErrores[1] = comprobarCampoVacio(credenciales.getNombre(),"Nombre");
+            vectorErrores[2] = comprobarCampoVacio(credenciales.getEmail(), "EMail");
+            vectorErrores[3] = comprobarCampoVacio(credenciales.getContrasenia(), "Contrasena");
+            vectorErrores[4] = comprobarCampoVacio(credenciales.getContraseniaRepetida(), "Contrasena repetida");
+            int contadorErrores = 0;
+            for(int i = 0; i < vectorErrores.length; i++){
+                if (!vectorErrores[i].equals("no vacio")){
+                    contadorErrores++;
+                }
+            }
+            if (contadorErrores == 0){
+                Persona persona = new Persona();
+                persona.setApellido(credenciales.getApellido());
+                persona.setNombre(credenciales.getNombre());
+                persona.setEmail(credenciales.getEmail());
+                persona.setContrasenia(credenciales.getContrasenia());
+                personaRepository.save(persona);
+                return "persona registrada";
+            }else{
+                return "Fallo al registrar";
+            }
+
+        }catch (Exception e){
+
+            throw new Exception("Fallo al registrar persona " + e.getMessage());
+        }
+    }
+
     public String AddArticleToCart(String EmailPersona, String idArticulo) throws  Exception{
-        //try {
+        try {
             Persona personaTraida = personaRepository.searchByEmail(EmailPersona);
 
             Parlante articulo1 = new Parlante( "ParlanteTest",123,true);
@@ -123,8 +162,75 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
 
 
             return "Retorno";
-        //}catch (Exception e){
-        //    throw new Exception("Fallo al agregar articulo al carrito");
-        //}
+        }catch (Exception e){
+            throw new Exception("Fallo al agregar articulo al carrito");
+        }
+    }
+
+    public String cambiarContrasenia(DtoPersonaCambioCredenciales credenciales) throws  Exception{
+        try{
+            Persona persona = personaRepository.searchByEmail(credenciales.getEmail());
+            System.out.println(credenciales.getContraseniaRepetida() + " " + credenciales.getContrasenia());
+
+
+            if(!credenciales.getContrasenia().equals(credenciales.getContraseniaRepetida()) ){
+                return "Las contrañas deben ser identicas";
+            }
+
+            if(credenciales.getEmail() != credenciales.getNuevoEmail()){
+                Persona persona2 = personaRepository.searchByEmail(credenciales.getNuevoEmail());
+                System.out.println("llegaInterno");
+                if (persona2 == null){
+                    System.out.println("llegaRomep");
+                    persona.setEmail(credenciales.getNuevoEmail());
+                }else{
+                    return "No se puede cambiar a el email indicado";
+                }
+            }
+
+            if (persona.getCodigoSeguridad() == credenciales.getCodigo()){
+                persona.setContrasenia(credenciales.getContrasenia());
+                personaRepository.save(persona);
+                return "modificacion de credenciales exitosa";
+            }else{
+                return "El codigo es incorrecto";
+            }
+        }catch (Exception e){
+            throw new Exception("Fallo al actualizar credenciales");
+        }
+    }
+
+    public String realizarCompra(String email)throws Exception{
+        Persona persona = personaRepository.searchByEmail(email);
+
+        if (persona == null){
+            return "No existe la persona al mail asociado";
+        }
+
+        Carrito carrito = persona.getPersonaCarritos().get(0); //Esto va a fallar, no siempre es el carrito nuevo, hay que filtrarlo
+        carrito.setEstado("Comprado");
+
+        carritoRepository.save(carrito);
+        carrito.setDetalleCarritos(null);
+        return "Compra realizada";
+    }
+
+    public String limpiarCarrito(String email)throws Exception{
+        Persona persona = personaRepository.searchByEmail(email);
+
+        if (persona == null){
+            return "No existe la persona al mail asociado";
+        }
+
+        Carrito carrito = persona.getPersonaCarritos().get(0); //Esto va a fallar, no siempre es el carrito nuevo, hay que filtrarlo
+        carrito.setEstado("Comprado");
+
+        carritoRepository.save(carrito);
+        carrito.setDetalleCarritos(null);
+        return "Compra realizada";
+    }
+
+    private Carrito buscarCarritoActivo(ArrayList<Carrito> listaCarritos){
+        return new Carrito();
     }
 }
