@@ -1,6 +1,7 @@
 package com.example.myphonestore.repositories;
 
 import com.example.myphonestore.entities.Articulo;
+import com.example.myphonestore.entities.Persona;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,10 @@ public interface ArticuloRepository extends JpaRepository<Articulo, Long> {
             nativeQuery = true
     )
     Page<Articulo> search(@Param("filtro") String filtro, Pageable pageable);
+
+    @Query(
+            value = "SELECT * FROM articulo WHERE articulo.id LIKE %:id%",
+            nativeQuery = true
+    )
+    Articulo searchByid(@Param("id") String id);
 }

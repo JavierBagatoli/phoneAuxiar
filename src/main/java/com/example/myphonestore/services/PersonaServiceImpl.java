@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -128,10 +127,10 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
         try {
             Persona personaTraida = personaRepository.searchByEmail(EmailPersona);
 
-            Parlante articulo1 = new Parlante( "ParlanteTest",123,true);
-            articulo1.setDescripcion("descripcion");
-            articulo1.setDenominacion("EsUnparlante");
+            Articulo articulo1 = articuloRepository.searchByid(idArticulo);
             articuloRepository.save(articulo1);
+
+            System.out.println("llega1");
 
             DetalleCarrito detalleCarrito = new DetalleCarrito();
             detalleCarrito.setSubtotal(150);
@@ -140,30 +139,19 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
 
             detalleCarritoRepository.save(detalleCarrito);
 
-            List<DetalleCarrito> listaDeDetalles = new ArrayList<>();
+            ///Encontrar ultimo carrito
+            int tamanioListaCarritos = personaTraida.getPersonaCarritos().size()-1;
+            Carrito carritoActual = personaTraida.getPersonaCarritos().get(tamanioListaCarritos);
+
+            List<DetalleCarrito> listaDeDetalles = carritoActual.getDetalleCarritos();
             listaDeDetalles.add(detalleCarrito);
 
-            Carrito nuevoCarrito = new Carrito(new Date(), "nuevo", 123,123,21,listaDeDetalles);
-
-
-            nuevoCarrito.setDetalleCarritos(listaDeDetalles);
-            carritoRepository.save(nuevoCarrito);
-
-            //Lista de carritos
-            List<Carrito> listaCarritos = personaTraida.getPersonaCarritos();
-            listaCarritos.add(nuevoCarrito);
-
-            personaTraida.setPersonaCarritos(listaCarritos);
-
-            personaRepository.save(personaTraida);
-
-
-
-
+            carritoActual.setDetalleCarritos(listaDeDetalles);
+            carritoRepository.save(carritoActual);
 
             return "Retorno";
         }catch (Exception e){
-            throw new Exception("Fallo al agregar articulo al carrito");
+            throw new Exception("Fallo al agregar articulo al carrito: " + e);
         }
     }
 
@@ -202,16 +190,25 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
 
     public String realizarCompra(String email)throws Exception{
         Persona persona = personaRepository.searchByEmail(email);
-
+        System.out.println(persona.getEmail());
         if (persona == null){
             return "No existe la persona al mail asociado";
         }
 
-        Carrito carrito = persona.getPersonaCarritos().get(0); //Esto va a fallar, no siempre es el carrito nuevo, hay que filtrarlo
+        int tamanioCarrito = persona.getPersonaCarritos().size() -1;
+        Carrito carrito = persona.getPersonaCarritos().get(tamanioCarrito);
         carrito.setEstado("Comprado");
 
         carritoRepository.save(carrito);
-        carrito.setDetalleCarritos(null);
+
+
+        List<Carrito> nuevaListaDeCarritos = persona.getPersonaCarritos();
+        nuevaListaDeCarritos.add(new Carrito());
+        persona.setPersonaCarritos(nuevaListaDeCarritos);
+
+        personaRepository.save(persona);
+
+
         return "Compra realizada";
     }
 
@@ -222,12 +219,18 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
             return "No existe la persona al mail asociado";
         }
 
-        Carrito carrito = persona.getPersonaCarritos().get(0); //Esto va a fallar, no siempre es el carrito nuevo, hay que filtrarlo
-        carrito.setEstado("Comprado");
+        int tamanioCarrito = persona.getPersonaCarritos().size() -1;
+        Carrito carrito = persona.getPersonaCarritos().get(tamanioCarrito);
+
+        carrito.setEstado("vacio");
+        List<DetalleCarrito> listaBorrada = carrito.getDetalleCarritos();
+        listaBorrada.clear();
+
+        carrito.setDetalleCarritos(listaBorrada);
 
         carritoRepository.save(carrito);
-        carrito.setDetalleCarritos(null);
-        return "Compra realizada";
+
+        return "carrito limpiado";
     }
 
     private Carrito buscarCarritoActivo(ArrayList<Carrito> listaCarritos){

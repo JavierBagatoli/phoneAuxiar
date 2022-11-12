@@ -1,5 +1,6 @@
 package com.example.myphonestore.controllers;
 
+import com.example.myphonestore.entities.Dtos.DtoObjeto;
 import com.example.myphonestore.entities.Dtos.DtoPersonaCambioCredenciales;
 import com.example.myphonestore.entities.Dtos.DtoPersonaLogin;
 import com.example.myphonestore.entities.Dtos.DtoPersonaRegistro;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -40,9 +39,9 @@ public class PersonaController extends BaseControllerImpl<Persona, PersonaServic
     }
 
     @PostMapping("/{emailPersona}/agregarAlCarrito")
-    public ResponseEntity<?> update(@PathVariable String emailPersona,@RequestBody String id){
+    public ResponseEntity<?> update(@PathVariable String emailPersona,@RequestBody DtoObjeto id){
         try {
-            String respuesta = servicePersona.AddArticleToCart(emailPersona, id);
+            String respuesta = servicePersona.AddArticleToCart(emailPersona, id.getId());
             return ResponseEntity.status(HttpStatus.OK).body("{\"response\":\"" + respuesta + "\"}");
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"" + e.getMessage() +"\"}");
@@ -70,9 +69,9 @@ public class PersonaController extends BaseControllerImpl<Persona, PersonaServic
     }
 
     @PostMapping("/realizarCompra")
-    public ResponseEntity<?> realizarCompra(@RequestBody String email){
+    public ResponseEntity<?> realizarCompra(@RequestBody DtoPersonaCambioCredenciales email){
         try{
-            String respuesta = servicePersona.realizarCompra(email);
+            String respuesta = servicePersona.realizarCompra(email.getEmail());
             return ResponseEntity.status(HttpStatus.OK).body("{\"response\":\"" + respuesta + "\"}");
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"" + e.getMessage() +"\"}");
@@ -80,9 +79,9 @@ public class PersonaController extends BaseControllerImpl<Persona, PersonaServic
     }
 
     @PostMapping("/limpiarCarrito")
-    public ResponseEntity<?> limpiarCarrito(@RequestBody String email){
+    public ResponseEntity<?> limpiarCarrito(@RequestBody DtoPersonaCambioCredenciales email){
         try{
-            String respuesta = servicePersona.limpiarCarrito(email);
+            String respuesta = servicePersona.limpiarCarrito(email.getEmail());
             return ResponseEntity.status(HttpStatus.OK).body("{\"response\":\"" + respuesta + "\"}");
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"" + e.getMessage() +"\"}");
