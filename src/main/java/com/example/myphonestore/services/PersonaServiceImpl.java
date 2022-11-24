@@ -129,7 +129,6 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
 
             Articulo articulo1 = articuloRepository.searchByid(idArticulo);
             articuloRepository.save(articulo1);
-
             System.out.println("llega1");
 
             DetalleCarrito detalleCarrito = new DetalleCarrito();
@@ -141,6 +140,9 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
 
             ///Encontrar ultimo carrito
             int tamanioListaCarritos = personaTraida.getPersonaCarritos().size()-1;
+            if (tamanioListaCarritos < 0){
+                tamanioListaCarritos = 0;
+            }
             Carrito carritoActual = personaTraida.getPersonaCarritos().get(tamanioListaCarritos);
 
             List<DetalleCarrito> listaDeDetalles = carritoActual.getDetalleCarritos();
