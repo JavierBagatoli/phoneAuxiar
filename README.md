@@ -1,6 +1,6 @@
 ### MyPhone-Store
 
-Es un proyecto de estudio para la materia de Taller de programación avanzada donde se explora y estudiara Java junto a SQL al igual que tecnologías como pueden ser	Spring Boot o Envers
+Es un proyecto de estudio para la materia de Taller de programación avanzada donde se explora y estudiara Java junto a SQL al igual que tecnologías como pueden ser Spring Boot o Envers
 
 ## Descripción
 
@@ -20,5 +20,10 @@ Franco Galiotti : Abierto a nuevos desafios.
 
 Carlos Gutierrez : Estudiante de la carrera ingeniería en sistemas, positivo y esperando trabajar en nuevos proyectos.
 
-### Prototipo de MyPhone Store 
+### Prototipo de MyPhone Store
+
 <a href="https://www.figma.com/proto/RDDJS4vEcXatX44gWVKo1W/MyPhone-Store?node-id=39%3A192&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=2%3A3"> Prototipo creado en Figma</a>
+
+# Nota
+
+He dejado un documento Consultas.md donde se encuentran todas las consultas que yo realice para comprobar el funcionamiento de la aplicacion.
