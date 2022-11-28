@@ -21,8 +21,8 @@ public class PersonaController extends BaseControllerImpl<Persona, PersonaServic
     @PutMapping("/{id}/generarToken")
     public ResponseEntity<?> update(@PathVariable Long id){
         try {
-            servicePersona.generarCodigoSeguridad(id);
-            return ResponseEntity.status(HttpStatus.OK).body("\"response\":\"Token generado exitosamente\"");
+            String respuesta = servicePersona.generarCodigoSeguridad(id);
+            return ResponseEntity.status(HttpStatus.OK).body("\"response\":\"" + respuesta + "\"");
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente mas tarde.\"}");
         }

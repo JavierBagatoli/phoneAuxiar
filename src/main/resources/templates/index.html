@@ -36,7 +36,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="usuario : ${}}"
+            <tr th:each="articulo : {articulo}">
+                <td th:text="${articulo}">Articulo</td>
+            </tr>
         </tbody>
     </table>
 

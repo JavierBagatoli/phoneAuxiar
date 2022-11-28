@@ -54,6 +54,7 @@ public class Persona extends Base {
 
 
     public void generarCodigoSeguridad(){
-        setCodigoSeguridad(123456);
+        int numero = (int) (Math.random()*999999);
+        setCodigoSeguridad(numero);
     }
 }

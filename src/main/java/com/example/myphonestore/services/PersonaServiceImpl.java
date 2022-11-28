@@ -57,14 +57,16 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
     }
 
     @Override
-    public void generarCodigoSeguridad(Long id) throws Exception {
+    public String generarCodigoSeguridad(Long id) throws Exception {
         try{
             Optional<Persona> personaTraida = personaRepository.findById(id);
             if (personaTraida.isPresent()){
                 Persona persona = personaTraida.get();
                 persona.generarCodigoSeguridad();
                 personaRepository.save(persona);
+                return Integer.toString(persona.getCodigoSeguridad());
             }
+            return "Fallo al generar";
         }catch(Exception e){
             throw new Exception("Fallo al generar token de seguridad");
         }
