@@ -113,6 +113,9 @@ public class PersonaServiceImpl extends BaseServiceImpl<Persona,Long> implements
                 persona.setNombre(credenciales.getNombre());
                 persona.setEmail(credenciales.getEmail());
                 persona.setContrasenia(credenciales.getContrasenia());
+                List<Carrito> listaCarritosNueva = new ArrayList<>();
+                listaCarritosNueva.add(new Carrito());
+                persona.setPersonaCarritos(listaCarritosNueva);
                 personaRepository.save(persona);
                 return "persona registrada";
             }else{
